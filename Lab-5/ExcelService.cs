@@ -9,7 +9,6 @@ using NPOI.XSSF.UserModel;
 
 namespace Lab5
 {
-    /// <summary>Чтение и запись Excel через NPOI.</summary>
     internal static class ExcelService
     {
         public static Database Load(string path)
@@ -149,10 +148,7 @@ namespace Lab5
             }
         }
 
-        /// <summary>
-        /// Универсальное чтение таблицы. Строки без
-        /// положительного целого ID и дубликаты пропускаются.
-        /// </summary>
+
         private static List<T> ReadTable<T>(
             ISheet sheet, Func<int, IRow, T> map)
             where T : class
@@ -180,7 +176,7 @@ namespace Lab5
             return items;
         }
 
-        /// <summary>Универсальная запись листа.</summary>
+
         private static void WriteSheet(
             IWorkbook book,
             string name,
@@ -275,10 +271,7 @@ namespace Lab5
                 : "";
         }
 
-        /// <summary>
-        /// Целое читается строго: дробное значение
-        /// в колонке ID считается некорректным.
-        /// </summary>
+
         private static bool TryInt(
             IRow row, int index, out int value)
         {

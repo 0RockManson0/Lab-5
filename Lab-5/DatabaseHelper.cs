@@ -12,8 +12,7 @@ namespace Lab5
     internal static class DatabaseHelper
     {
         private const int PageSize = 20;
-
-        // ---------- загрузка и сохранение ----------
+        
 
         public static Database Load(string path)
         {
@@ -81,8 +80,7 @@ namespace Lab5
             return ConsoleHelper.ReadIntInRange(
                 "Ваш выбор: ", 0, 3);
         }
-
-        // ---------- просмотр ----------
+        
 
         public static void View(Database db)
         {
@@ -195,8 +193,7 @@ namespace Lab5
                 }
             }
         }
-
-        // ---------- работа с ключами ----------
+        
 
         private static int NewKey(
             IEnumerable<int> keys, string title)
@@ -245,8 +242,7 @@ namespace Lab5
                     "Записи с ID " + id + " не существует.");
             }
         }
-
-        // ---------- добавление ----------
+        
 
         public static void Add(Database db)
         {
@@ -376,8 +372,7 @@ namespace Lab5
                 id, accountId, currencyId, date, amount));
             return true;
         }
-
-        // ---------- удаление ----------
+        
 
         public static void Delete(Database db)
         {
@@ -420,10 +415,7 @@ namespace Lab5
             }
         }
 
-        /// <summary>
-        /// Универсальное удаление по ключу: проверка
-        /// существования, каскад, подтверждение, самопроверка.
-        /// </summary>
+
         private static bool DeleteByKey<T>(
             List<T> table,
             Func<T, int> key,
@@ -471,8 +463,6 @@ namespace Lab5
             return true;
         }
 
-        // ---------- период ----------
-
         private static void ReadPeriod(
             IEnumerable<DateTime> dates,
             out DateTime start,
@@ -507,7 +497,7 @@ namespace Lab5
             while (start > end);
         }
 
-        // ---------- запрос 1: одна таблица, перечень ----------
+        //запрос 1: одна таблица, перечень
 
         public static void Query1(Database db)
         {
@@ -541,7 +531,7 @@ namespace Lab5
             ShowPages(result, "Результат запроса 1");
         }
 
-        // ---------- запрос 2: две таблицы, значение ----------
+        //запрос 2: две таблицы, значение
 
         public static void Query2(Database db)
         {
@@ -582,7 +572,7 @@ namespace Lab5
                 Math.Truncate(rubles.Sum()).ToString("F0"));
         }
 
-        // ---------- запрос 3: три таблицы, значение ----------
+        //запрос 3: три таблицы, значение
 
         public static void Query3(Database db)
         {
@@ -642,7 +632,7 @@ namespace Lab5
                 "ОТВЕТ: " + surname.ToUpperInvariant());
         }
 
-        // ---------- запрос 4: три таблицы, перечень ----------
+        // запрос 4: три таблицы, перечень
 
         public static void Query4(Database db)
         {

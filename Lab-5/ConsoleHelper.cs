@@ -3,7 +3,6 @@ using System.Globalization;
 
 namespace Lab5
 {
-    /// <summary>Проверка ввода с клавиатуры.</summary>
     internal static class ConsoleHelper
     {
         private const double Limit = 1e12;
@@ -44,8 +43,7 @@ namespace Lab5
         {
             return ReadIntInRange(message, 1, int.MaxValue);
         }
-
-        /// <summary>ID. 0 — отмена операции.</summary>
+        
         public static int ReadIdOrCancel(string message)
         {
             return ReadIntInRange(message, 0, int.MaxValue);

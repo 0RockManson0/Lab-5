@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Lab5
 {
-    /// <summary>Таблица «Счета».</summary>
     public class Account
     {
         public int Id { get; set; }
@@ -29,8 +28,7 @@ namespace Lab5
                 OpenDate.ToString("dd.MM.yyyy");
         }
     }
-
-    /// <summary>Таблица «Курс валют».</summary>
+    
     public class CurrencyRate
     {
         public int Id { get; set; }
@@ -58,8 +56,7 @@ namespace Lab5
                 Rate.ToString("F4").PadRight(12) + Name;
         }
     }
-
-    /// <summary>Таблица «Поступления».</summary>
+    
     public class Transaction
     {
         public int Id { get; set; }
@@ -96,8 +93,7 @@ namespace Lab5
                 Amount.ToString("F2");
         }
     }
-
-    /// <summary>База данных целиком.</summary>
+    
     public class Database
     {
         public List<Account> Accounts { get; set; }
