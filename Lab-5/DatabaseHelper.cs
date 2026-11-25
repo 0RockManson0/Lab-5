@@ -5,14 +5,11 @@ using System.Linq;
 
 namespace Lab5
 {
-    /// <summary>
-    /// Вспомогательный класс: весь функционал приложения.
-    /// Все выборки реализованы LINQ-запросами.
-    /// </summary>
     internal static class DatabaseHelper
     {
         private const int PageSize = 20;
-        
+
+        // загрузка и сохранение
 
         public static Database Load(string path)
         {
@@ -80,7 +77,8 @@ namespace Lab5
             return ConsoleHelper.ReadIntInRange(
                 "Ваш выбор: ", 0, 3);
         }
-        
+
+        // просмотр
 
         public static void View(Database db)
         {
@@ -169,7 +167,8 @@ namespace Lab5
             }
 
             int pages = (items.Count + PageSize - 1) / PageSize;
-            for (int page = 0; page < pages; page++)
+            int page = 0;
+            for (page = 0; page < pages; page++)
             {
                 Console.WriteLine(
                     "\n" + title + ": страница " + (page + 1) +
@@ -193,7 +192,8 @@ namespace Lab5
                 }
             }
         }
-        
+
+        // работа с ключами
 
         private static int NewKey(
             IEnumerable<int> keys, string title)
@@ -242,7 +242,8 @@ namespace Lab5
                     "Записи с ID " + id + " не существует.");
             }
         }
-        
+
+        // добавление
 
         public static void Add(Database db)
         {
@@ -372,7 +373,8 @@ namespace Lab5
                 id, accountId, currencyId, date, amount));
             return true;
         }
-        
+
+        // удаление
 
         public static void Delete(Database db)
         {
@@ -463,6 +465,8 @@ namespace Lab5
             return true;
         }
 
+        // период
+
         private static void ReadPeriod(
             IEnumerable<DateTime> dates,
             out DateTime start,
@@ -538,8 +542,8 @@ namespace Lab5
             Console.WriteLine(
                 "\nЗапрос 2 (две таблицы, значение):");
             Console.WriteLine(
-                "Суммарный объём всех поступлений " +
-                "в рублях за указанный период.");
+                "Суммарный объём всех поступлений в рублях " +
+                "за указанный период.");
 
             if (db.Transactions.Count == 0)
             {
@@ -554,22 +558,20 @@ namespace Lab5
                 db.Transactions.Select(t => t.Date),
                 out start, out end);
 
-            List<double> rubles = (
+            double total = (
                 from transaction in db.Transactions
                 join rate in db.Rates
                     on transaction.CurrencyId equals rate.Id
                 where transaction.Date >= start &&
                       transaction.Date <= end
-                select transaction.Amount * rate.Rate).ToList();
+                select transaction.Amount * rate.Rate).Sum();
 
             Console.WriteLine(
-                "\nОпераций учтено: " + rubles.Count);
-            Console.WriteLine(
-                "Сумма: " + rubles.Sum().ToString("F2") +
-                " руб.");
+                "\nСуммарное поступление: " +
+                total.ToString("F2") + " руб.");
             Console.WriteLine(
                 "Целая часть: " +
-                Math.Truncate(rubles.Sum()).ToString("F0"));
+                Math.Truncate(total).ToString("F0"));
         }
 
         //запрос 3: три таблицы, значение
@@ -595,7 +597,7 @@ namespace Lab5
                 db.Transactions.Select(t => t.Date),
                 out start, out end);
 
-            var best = (
+            string surname = (
                 from transaction in db.Transactions
                 join rate in db.Rates
                     on transaction.CurrencyId equals rate.Id
@@ -605,34 +607,23 @@ namespace Lab5
                       transaction.Date <= end
                 group transaction.Amount * rate.Rate
                     by account.FullName into holder
-                select new
-                {
-                    Name = holder.Key,
-                    Total = holder.Sum()
-                })
-                .OrderByDescending(x => x.Total)
-                .ThenBy(x => x.Name)
+                orderby holder.Sum() descending, holder.Key
+                select holder.Key.Split(
+                    new[] { ' ' },
+                    StringSplitOptions.RemoveEmptyEntries)[0])
                 .FirstOrDefault();
 
-            if (best == null)
+            if (surname == null)
             {
                 Console.WriteLine("\nЗа период операций нет.");
                 return;
             }
 
-            string surname = best.Name.Split(
-                new[] { ' ' },
-                StringSplitOptions.RemoveEmptyEntries)[0];
-
-            Console.WriteLine("\nДержатель: " + best.Name);
             Console.WriteLine(
-                "Начисление: " +
-                best.Total.ToString("F2") + " руб.");
-            Console.WriteLine(
-                "ОТВЕТ: " + surname.ToUpperInvariant());
+                "\nОТВЕТ: " + surname.ToUpperInvariant());
         }
 
-        // запрос 4: три таблицы, перечень
+        //запрос 4: три таблицы, перечень
 
         public static void Query4(Database db)
         {
@@ -672,7 +663,7 @@ namespace Lab5
             int top = ConsoleHelper.ReadIntInRange(
                 "Сколько строк вывести (1-100): ", 1, 100);
 
-            var result = (
+            var joined =
                 from transaction in db.Transactions
                 join rate in db.Rates
                     on transaction.CurrencyId equals rate.Id
@@ -681,12 +672,15 @@ namespace Lab5
                 where transaction.CurrencyId == currencyId &&
                       transaction.Date >= start &&
                       transaction.Date <= end
-                group new
+                select new
                 {
                     account.FullName,
                     Rubles = transaction.Amount * rate.Rate
-                }
-                by account.FullName into holder
+                };
+
+            var result = (
+                from item in joined
+                group item by item.FullName into holder
                 orderby holder.Sum(x => x.Rubles) descending
                 select new
                 {
@@ -707,7 +701,8 @@ namespace Lab5
             Console.WriteLine(
                 "\n№   ФИО                       " +
                 "Операций  Сумма, руб.");
-            for (int i = 0; i < result.Count; i++)
+            int i = 0;
+            for (i = 0; i < result.Count; i++)
             {
                 Console.WriteLine(
                     (i + 1).ToString().PadRight(4) +

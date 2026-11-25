@@ -18,7 +18,8 @@ namespace Lab5
             int value = 0;
             while (!int.TryParse(ReadLine(message), out value))
             {
-                Console.WriteLine("Ошибка. Введите целое число.");
+                Console.WriteLine(
+                    "Ошибка. Введите целое число.");
             }
 
             return value;
@@ -47,34 +48,6 @@ namespace Lab5
         public static int ReadIdOrCancel(string message)
         {
             return ReadIntInRange(message, 0, int.MaxValue);
-        }
-
-        public static uint ReadUInt(string message)
-        {
-            uint value = 0;
-            while (!uint.TryParse(ReadLine(message), out value))
-            {
-                Console.WriteLine(
-                    "Ошибка. Введите целое " +
-                    "неотрицательное число.");
-            }
-
-            return value;
-        }
-
-        public static uint ReadUIntInRange(
-            string message, uint min, uint max)
-        {
-            uint value = ReadUInt(message);
-            while (value < min || value > max)
-            {
-                Console.WriteLine(
-                    "Число должно быть от " + min +
-                    " до " + max + ".");
-                value = ReadUInt(message);
-            }
-
-            return value;
         }
 
         public static double ReadDouble(string message)

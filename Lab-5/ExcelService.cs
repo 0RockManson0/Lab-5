@@ -100,8 +100,8 @@ namespace Lab5
         {
             IWorkbook book = path.EndsWith(
                 ".xlsx", StringComparison.OrdinalIgnoreCase)
-                ? new XSSFWorkbook()
-                : (IWorkbook)new HSSFWorkbook();
+                ? (IWorkbook)new XSSFWorkbook()
+                : new HSSFWorkbook();
 
             ICellStyle headerStyle = book.CreateCellStyle();
             IFont font = book.CreateFont();
@@ -147,16 +147,16 @@ namespace Lab5
                 book.Write(stream);
             }
         }
-
-
+        
         private static List<T> ReadTable<T>(
             ISheet sheet, Func<int, IRow, T> map)
             where T : class
         {
             List<T> items = new List<T>();
             HashSet<int> keys = new HashSet<int>();
+            int i = 0;
 
-            for (int i = 0; i <= sheet.LastRowNum; i++)
+            for (i = 0; i <= sheet.LastRowNum; i++)
             {
                 IRow row = sheet.GetRow(i);
                 int id;
@@ -175,8 +175,7 @@ namespace Lab5
 
             return items;
         }
-
-
+        
         private static void WriteSheet(
             IWorkbook book,
             string name,
@@ -187,8 +186,9 @@ namespace Lab5
         {
             ISheet sheet = book.CreateSheet(name);
             IRow header = sheet.CreateRow(0);
+            int i = 0;
 
-            for (int i = 0; i < headers.Length; i++)
+            for (i = 0; i < headers.Length; i++)
             {
                 ICell cell = header.CreateCell(i);
                 cell.SetCellValue(headers[i]);
@@ -201,7 +201,7 @@ namespace Lab5
             {
                 IRow row = sheet.CreateRow(index);
                 index++;
-                for (int i = 0; i < values.Length; i++)
+                for (i = 0; i < values.Length; i++)
                 {
                     ICell cell = row.CreateCell(i);
                     if (values[i] is DateTime)
@@ -229,7 +229,8 @@ namespace Lab5
         private static ISheet FindSheet(
             IWorkbook book, int index, params string[] names)
         {
-            for (int i = 0; i < book.NumberOfSheets; i++)
+            int i = 0;
+            for (i = 0; i < book.NumberOfSheets; i++)
             {
                 string title =
                     (book.GetSheetName(i) ?? "").Trim();
@@ -270,7 +271,6 @@ namespace Lab5
                 ? (cell.StringCellValue ?? "").Trim()
                 : "";
         }
-
 
         private static bool TryInt(
             IRow row, int index, out int value)

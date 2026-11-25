@@ -150,7 +150,8 @@ namespace Lab5
 
             DirectoryInfo dir =
                 new DirectoryInfo(AppContext.BaseDirectory);
-            for (int i = 0; i < 4 && dir != null; i++)
+            int i = 0;
+            for (i = 0; i < 4 && dir != null; i++)
             {
                 string candidate =
                     Path.Combine(dir.FullName, path);
