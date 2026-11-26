@@ -50,7 +50,7 @@
 
 | Файл | Назначение |
 |---|---|
-| `Models.cs` | классы предметной области: `Account`, `CurrencyRate`, `Transaction`, контейнер `Database` |
+| `Модели` | классы предметной области: `Account.cs`, `CurrencyRate.cs`, `Transaction.cs`, контейнер `Database.cs` |
 | `ExcelService.cs` | чтение и запись Excel через NPOI |
 | `DatabaseHelper.cs` | **вспомогательный класс** — весь функционал приложения на LINQ |
 | `ConsoleHelper.cs` | валидация пользовательского ввода |
